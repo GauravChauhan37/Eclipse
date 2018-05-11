@@ -15,7 +15,6 @@ public class binaryoctal {
 		sb = sc.nextInt();
 		System.out.println("Enter destination base");
 		db = sc.nextInt();
-
 		anyToany(sn, sb, db);
 
 	}
