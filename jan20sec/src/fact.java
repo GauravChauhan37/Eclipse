@@ -11,7 +11,7 @@ public class fact {
 		if (n == 0) {
 			return 1;
 		}
-		int something = n * fact(n - 1);
-		return something;
+		int s = n * fact(n - 1);
+		return s;
 	}
 }
