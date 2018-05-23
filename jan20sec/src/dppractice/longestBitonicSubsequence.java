@@ -1,5 +1,7 @@
 package dppractice;
 
+import java.util.Scanner;
+
 public class longestBitonicSubsequence {
 	public static void longestBitSub(int[] arr) {
 		int[] incsub = new int[arr.length];
@@ -33,7 +35,11 @@ public class longestBitonicSubsequence {
 	}
 
 	public static void main(String[] args) {
-		int[] arr = { 10, 22, 9, 33, 21, 50, 41, 60, 80, 1 };
+		Scanner sc = new Scanner(System.in);
+		int[] arr = new int[sc.nextInt()];
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = sc.nextInt();
+		}
 		longestBitSub(arr);
 	}
 
