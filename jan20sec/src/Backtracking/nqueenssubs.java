@@ -3,11 +3,11 @@ package Backtracking;
 public class nqueenssubs {
 	public static boolean isqueenSafe(boolean[][] board, int rno, int cno) {
 		int[][] dirs = { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 }, { -1, -1 } };
-		for (int dir = 0; dir < dirs.length; dir++) {
+		for (int i = 0; i < dirs.length; i++) {
 			int radius = 1;
 			while (true) {
-				int rdash = rno + radius * dirs[dir][0];
-				int cdash = cno + radius * dirs[dir][1];
+				int rdash = rno + radius * dirs[i][0];
+				int cdash = cno + radius * dirs[i][1];
 				if (rdash < 0 || rdash >= board.length) {
 					break;
 				}

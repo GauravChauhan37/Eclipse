@@ -24,10 +24,10 @@ public class nqueenprob {
 	}
 
 	public static void solve(int[][] maze, int i, int j) {
-		if (i == maze.length) {
+		if (i >= maze.length) {
 			return;
 		}
-		if (j == maze[0].length) {
+		if (j >= maze[0].length) {
 			solve(maze, i + 1, 0);
 			return;
 		}

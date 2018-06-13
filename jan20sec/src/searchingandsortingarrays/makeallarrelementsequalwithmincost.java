@@ -7,7 +7,7 @@ public class makeallarrelementsequalwithmincost {
 			cost += Math.abs(arr[i] - X);
 		return cost;
 	}
-
+ 
 	public static int minCostToMakeElementEqual(int arr[], int N) {
 		int low, high;
 		low = high = arr[0];

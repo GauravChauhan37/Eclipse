@@ -35,8 +35,8 @@ public class targetSum {
 	}
 
 	public static void main(String[] args) {
-		int[] arr = { 10, 20, 30, 40, 50, 60 };
-		int target = 70;
+		int[] arr = { 10, 20, 30, 40 };
+		int target = 40;
 		Boolean[][] pqb = new Boolean[arr.length + 1][10000];        
 		Boolean[][] nqb = new Boolean[arr.length + 1][10000];
 		System.out.println(checkSum(arr, 0, target, pqb, nqb));

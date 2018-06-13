@@ -52,16 +52,16 @@ public class invalidparenthesis {
 	public static void main(String[] args) {
 		String s = "()())()";
 		removeparth(s);
-		int max = 0;
-		for (int i = 1; i < al.size(); i++) {
-			String res = al.get(i);
-			if (res.length() > max) {
-				max = res.length();
-			}
-		}
+//		int max = 0;
+//		for (int i = 1; i < al.size(); i++) {
+//			String res = al.get(i);
+//			if (res.length() > max) {
+//				max = res.length();
+//			}
+//		}
 		for (int i = 0; i < al.size(); i++) {
 			String res = al.get(i);
-			if (res.length() == max)
+//			if (res.length() == max)
 				System.out.println(res);
 		}
 	}

@@ -59,8 +59,7 @@ public class nqueens {
 
 	public static void nqueensproactive(boolean[][] board, int bno, int qno, String psf, int lqpb) {
 		if (qno == 0) {
-			count++;
-			System.out.println(psf + "    " + count);
+			System.out.println(psf);
 			return;
 		}
 		for (int i = lqpb + 1; i < board.length * board[0].length; i++) {
