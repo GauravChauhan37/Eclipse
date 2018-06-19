@@ -1,15 +1,122 @@
 package JUNE15;
 
+
 public class linkedList {
-	static class Node {
-		int data;
-		Node next;
+	protected static class Node {
+		protected int data;
+		protected Node next;
+	}
+
+	public class HeapMover {
+		public Node node;
 	}
 
 	// data hiding
-	private Node head;
-	private Node tail;
-	private int size;
+	protected Node head;
+	protected Node tail;
+	protected int size;
+
+	public void reversePointer() {
+		helperPointer(this.head);
+
+	}
+
+	public boolean isPalindrome(linkedList list) {
+		HeapMover h = new HeapMover();
+		h.node = head;
+		return helperPalin(h, head, 0);
+	}
+
+	public void fold(linkedList list) {
+		Node curr;
+		for (curr = head; curr.next != null; curr = curr.next) {
+			int toBeInserted = this.removeAtLast();
+			Node temp = new Node();
+			temp.data = toBeInserted;
+
+			temp.next = curr.next;
+			curr.next = temp;
+			curr = curr.next;
+			size++;
+			if (curr.next == null) {
+				return;
+			}
+		}
+	}
+
+	public int mid(linkedList list) {
+		Node slow = head;
+		Node fast = head;
+		while (true) {
+			fast = fast.next;
+			if (fast == null) {
+				return slow.data;
+			}
+			fast = fast.next;
+			if (fast == null) {
+				return slow.data;
+			}
+			slow = slow.next;
+		}
+	}
+
+	public int findKthElement(linkedList list, int k) {
+		Node left = this.head;
+		Node right = this.head;
+		for (int i = 0; i < k; i++) {
+			right = right.next;
+		}
+		while (right != null) {
+			left = left.next;
+			right = right.next;
+		}
+		return left.data;
+	}
+
+	private boolean helperPalin(HeapMover left, Node right, int count) {
+		if (right == null) {
+			return true;
+		}
+		boolean f = helperPalin(left, right.next, count);
+		if (f == false) {
+			return f;
+		} else {
+			if (left.node.data == right.data) {
+				left.node = left.node.next;
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	public void helperPointer(Node curr) {
+		if (curr.next == null) {
+			return;
+		}
+		helperPointer(curr.next);
+		curr.next.next = curr;
+		curr.next = null;
+	}
+
+	public void reverseData() {
+		HeapMover hp = new HeapMover();
+		hp.node = head;
+		helperData(hp, head, 0);
+	}
+
+	private void helperData(HeapMover left, Node right, int count) {
+		if (right == null) {
+			return;
+		}
+		helperData(left, right.next, count + 1);
+		if (count >= size / 2) {
+			int temp = left.node.data;
+			left.node.data = right.data;
+			right.data = temp;
+		}
+		left.node = left.node.next;
+	}
 
 	public void addLast(int data) {
 		if (size == 0) {

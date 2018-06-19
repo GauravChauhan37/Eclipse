@@ -52,7 +52,7 @@ public class client {
 		System.out.println(lt.size());
 		lt.removeAtLast();
 		lt.display();
-		lt.addAtIndex(80,3);
+		lt.addAtIndex(80, 3);
 		lt.display();
 		lt.removeAtIndex(2);
 		lt.display();

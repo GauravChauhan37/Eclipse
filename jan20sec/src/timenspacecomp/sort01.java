@@ -1,9 +1,15 @@
 package timenspacecomp;
 
+import java.util.Scanner;
+
 public class sort01 {
 
 	public static void main(String[] args) {
-		int[] a = { 1, 0, 0, 1, 0, 1, 1, 1 };
+			Scanner sc = new Scanner(System.in);
+			int[] a = new int[sc.nextInt()];
+			for (int i = 0; i < a.length; i++) {
+				a[i] = sc.nextInt();
+			}
 		int i = 0, j = a.length - 1;
 		while (i <= j) {
 			if (a[i] == 0) {

@@ -1,11 +1,17 @@
 package timenspacecomp;
 
+import java.util.Scanner;
+
 import javax.swing.plaf.synth.SynthStyle;
 
 public class sort012 {
 	// dutch national flag
 	public static void main(String[] args) {
-		int[] a = { 1, 2, 1, 1, 2, 0, 1, 1, 0, 2 };
+		Scanner sc = new Scanner(System.in);
+		int[] a = new int[sc.nextInt()];
+		for (int i = 0; i < a.length; i++) {
+			a[i] = sc.nextInt();
+		}
 		int low = 0;
 		int mid = 0;
 		int high = a.length - 1;
