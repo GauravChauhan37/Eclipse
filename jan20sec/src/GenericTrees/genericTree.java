@@ -1,4 +1,4 @@
-package trees;
+package GenericTrees;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,8 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
 
-// 10 3 20 3 50 0 60 0  70 0 30 2 80 0 90 0 40 1 100 0
+// 10 3 20 3 50 0 60 0  70 0 30 2 80 0 90 0 40 3 100 0 110 0 120 0
+// 10 3 40 2 100 0 110 0 30 2 80 0 90 0  20 3 50 0 60 0  70 0
 public class genericTree {
 	private class Node {
 		int data;
@@ -266,9 +267,11 @@ public class genericTree {
 		}
 		return temp;
 	}
+
 	public void lineariseEff() {
 		linearizeEff(root);
 	}
+
 	private Node linearizeEff(Node node) {
 		if (node.children.size() == 0) {
 			return node;
@@ -287,5 +290,165 @@ public class genericTree {
 		}
 
 		return overalltail;
+	}
+
+	static class HeapMover {
+		int size = 0;
+		int min = Integer.MAX_VALUE;
+		int max = Integer.MIN_VALUE;
+		boolean found = false;
+		int height = 0;
+		Node pred = null;
+		Node succ = null;
+		Node prev = null;
+		int justLarger = Integer.MAX_VALUE;
+	}
+
+	public void multiSolver(int data) {
+		HeapMover mover = new HeapMover();
+		multiSolver(mover, data, 0, root);
+		System.out.println("Size " + mover.size);
+		System.out.println("min " + mover.min);
+		System.out.println("max " + mover.max);
+		System.out.println("height " + mover.height);
+		System.out.println("found " + mover.found);
+		System.out.println(mover.pred == null ? "Not Found" : mover.pred.data);
+		System.out.println(mover.succ == null ? "Not Found" : mover.succ.data);
+		System.out.println("justLarger " + (mover.justLarger == Integer.MAX_VALUE ? "NotFound" : mover.justLarger));
+	}
+
+	private void multiSolver(HeapMover mover, int data, int depth, Node node) {
+		if (node.data == data) {
+			mover.found = true;
+			mover.pred = mover.prev;
+		} else if (mover.prev != null && mover.prev.data == data) {
+			mover.succ = node;
+		}
+		if (node.data > data && node.data < mover.justLarger) {
+			mover.justLarger = node.data;
+		}
+
+		mover.size++;
+		if (node.data < mover.min) {
+			mover.min = node.data;
+		}
+		if (node.data > mover.max) {
+			mover.max = node.data;
+		}
+		if (depth > mover.height) {
+			mover.height = depth;
+		}
+		mover.prev = node;
+		for (Node child : node.children) {
+			multiSolver(mover, data, depth + 1, child);
+		}
+	}
+
+	public int kthSmallest(int k) {
+		HeapMover mover = new HeapMover();
+		multiSolver(mover, Integer.MIN_VALUE, 0, root); /// this will set
+														/// mover.min
+		for (int i = 0; i < k - 1; i++) {
+			int temp = mover.justLarger;
+			mover.justLarger = Integer.MAX_VALUE;
+			multiSolver(mover, temp, 0, root);
+		}
+		return mover.justLarger;
+	}
+
+	public void isoMorphic(genericTree other) {
+		Node node = other.root;
+		System.out.println(isomorphic(this.root, node));
+	}
+
+	private boolean isomorphic(Node node1, Node node2) {
+		boolean ans = true;
+		if (node1.children.size() != node2.children.size()) {
+			ans = false;
+			return ans;
+		} else {
+			for (int i = 0; i < node1.children.size(); i++) {
+				ans = isomorphic(node1.children.get(i), node2.children.get(i));
+				if (ans == false) {
+					return false;
+				}
+			}
+		}
+		return ans;
+	}
+
+	public void isMirror(genericTree other) {
+		Node node = other.root;
+		System.out.println(isMirror(root, node));
+	}
+
+	private boolean isMirror(Node node1, Node node2) {
+		boolean ans = true;
+		if (node1.children.size() != node2.children.size()) {
+			ans = false;
+		} else {
+			for (int i = 0, j = node2.children.size() - 1; i < node1.children.size() && j >= 0; i++, j--) {
+				ans = isMirror(node1.children.get(i), node2.children.get(j));
+				if (ans == false) {
+					return false;
+				}
+			}
+		}
+		return ans;
+	}
+
+	public void isSymmetric() {
+		System.out.println(isMirror(this.root, this.root));
+	}
+
+	 class Pair {
+		Node node;
+		boolean printed;
+		int noOfChildrenPushed;
+	}
+
+	public void preOrderInterative() {
+		LinkedList<Pair> stack = new LinkedList<Pair>();
+		Pair rootNode = new Pair();
+		rootNode.node = this.root;
+		stack.addFirst(rootNode);
+
+		while (stack.size() != 0) {
+			Pair topNode = stack.get(0);
+			if (topNode.printed == false) {
+				System.out.println(topNode.node.data);
+				topNode.printed = true;
+			} else if (topNode.noOfChildrenPushed < topNode.node.children.size()) {
+				Pair toBePushed = new Pair();
+				toBePushed.node = topNode.node.children.get(topNode.noOfChildrenPushed);
+				stack.addFirst(toBePushed);
+				topNode.noOfChildrenPushed++;
+			} else {
+				stack.removeFirst();
+			}
+		}
+
+	}
+
+	public void postOrderInterative() {
+		LinkedList<Pair> stack = new LinkedList<Pair>();
+		Pair rootNode = new Pair();
+		rootNode.node = this.root;
+		stack.addFirst(rootNode);
+
+		while (stack.size() != 0) {
+			Pair topNode = stack.get(0);
+			if (topNode.noOfChildrenPushed < topNode.node.children.size()) {
+				Pair toBePushed = new Pair();
+				toBePushed.node = topNode.node.children.get(topNode.noOfChildrenPushed);
+				stack.addFirst(toBePushed);
+				topNode.noOfChildrenPushed++;
+			} else if (topNode.printed == false) {
+				System.out.println(topNode.node.data);
+				topNode.printed = true;
+			} else {
+				stack.removeFirst();
+			}
+		}
 	}
 }
