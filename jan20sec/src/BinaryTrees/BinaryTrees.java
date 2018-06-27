@@ -193,7 +193,8 @@ public class BinaryTrees {
 
 	private int height(Node node, int depth) {
 		if (node == null) {
-			return 0;
+			return -1; // if calculations are based on edges
+			// return = 0; // if calculations are based on nodes
 		}
 		int h = 0;
 		int h1 = height(node.left, depth);
@@ -406,6 +407,250 @@ public class BinaryTrees {
 			}
 			if (removed.right != null) {
 				queue.addLast(removed.right);
+			}
+		}
+	}
+
+	private static class DiaPair {
+		int ht;
+		int dt;
+	}
+
+	public void diameter() {
+		DiaPair h = diameter(this.root);
+		System.out.println(h.dt);
+	}
+
+	private DiaPair diameter(Node node) {
+		if (node == null) {
+			DiaPair mp = new DiaPair();
+			mp.ht = -1; // cz here calculation of height is based on edges
+			mp.dt = 0;
+			return mp;
+		}
+		DiaPair left = diameter(node.left);
+		DiaPair right = diameter(node.right);
+		DiaPair mp = new DiaPair();
+		mp.ht = Math.max(left.ht, right.ht) + 1;
+		mp.dt = Math.max(left.ht + right.ht + 2, Math.max(left.dt, right.dt));
+		// left.ht + right.ht + 2 --> distance btw left and right node
+		// left.dt --> max dist in left subtree
+		// right.dt --> max dist btw right subtree
+		return mp;
+	}
+
+	static class Pair {
+		int ht;
+		boolean flag;
+	}
+
+	public void isBalanced() {
+		Pair n = isBalanced(this.root);
+		System.out.println(n.flag);
+	}
+
+	private Pair isBalanced(Node node) {
+		if (node == null) {
+			Pair mp = new Pair();
+			mp.ht = 0;
+			mp.flag = true;
+			return mp;
+		}
+		Pair left = isBalanced(node.left);
+		Pair right = isBalanced(node.right);
+		Pair mp = new Pair();
+		mp.ht = Math.max(left.ht, right.ht) + 1;
+		if ((Math.abs(left.ht - right.ht) <= 1) && left.flag == true && right.flag == true) {
+			mp.flag = true;
+		} else {
+			mp.flag = false;
+		}
+		return mp;
+	}
+
+	static class bstPair {
+		boolean flag;
+		int maX;
+		int miN;
+	}
+
+	public void bst() {
+		bstPair h = bst(this.root);
+		System.out.println(h.flag);
+	}
+
+	private bstPair bst(Node node) {
+		if (node == null) {
+			bstPair mp = new bstPair();
+			mp.maX = Integer.MIN_VALUE;
+			mp.flag = true;
+			mp.miN = Integer.MAX_VALUE;
+			return mp;
+		}
+		bstPair left = bst(node.left);
+		bstPair right = bst(node.right);
+		bstPair mp = new bstPair();
+		mp.maX = Math.max(left.maX, Math.max(right.maX, node.data));
+		mp.miN = Math.min(node.data, Math.min(left.miN, right.miN));
+
+		if (node.data > left.maX && node.data < right.miN && left.flag == true && right.flag == true) {
+			mp.flag = true;
+		} else {
+			mp.flag = false;
+		}
+		return mp;
+	}
+
+	static class lPair {
+		boolean flag;
+		int maX;
+		int miN;
+		int size;
+		Node node;
+	}
+
+	public void largestbst() {
+		lPair ans = largestbst(this.root);
+		System.out.println(ans.node.data);
+		System.out.println(ans.size);
+	}
+
+	private lPair largestbst(Node node) {
+		if (node == null) {
+			lPair mp = new lPair();
+			mp.maX = Integer.MIN_VALUE;
+			mp.flag = true;
+			mp.miN = Integer.MAX_VALUE;
+			mp.size = 0;
+			mp.node = null;
+			return mp;
+		}
+		lPair left = largestbst(node.left);
+		lPair right = largestbst(node.right);
+		lPair mp = new lPair();
+		mp.maX = Math.max(left.maX, Math.max(right.maX, node.data));
+		mp.miN = Math.min(node.data, Math.min(left.miN, right.miN));
+
+		if (node.data > left.maX && node.data < right.miN && left.flag == true && right.flag == true) {
+			mp.flag = true;
+			mp.node = node;
+			mp.size = left.size + right.size + 1;
+		} else {
+			mp.flag = false;
+			if (left.size > right.size) {
+				mp.size = left.size;
+				mp.node = left.node;
+			} else {
+				mp.size = right.size;
+				mp.node = right.node;
+			}
+		}
+		return mp;
+	}
+
+	static class IPair {
+		Node node;
+		boolean isleftPushed;
+		boolean isrightPushed;
+		boolean isPrinted;
+
+		IPair(Node node, boolean isleftPushed, boolean isrightPushed, boolean isPrinted) {
+			this.node = node;
+			this.isleftPushed = isleftPushed;
+			this.isrightPushed = isrightPushed;
+			this.isPrinted = isPrinted;
+		}
+	}
+
+	public void preOrderItr() {
+		preOrderItr(this.root);
+	}
+
+	private void preOrderItr(Node node) {
+		LinkedList<IPair> stack = new LinkedList<IPair>();
+		IPair i = new IPair(node, false, false, false);
+		stack.addFirst(i);
+		while (stack.size() != 0) {
+			IPair top = stack.peek();
+			if (top.isPrinted == false) {
+				top.isPrinted = true;
+				System.out.print(top.node.data + " ");
+			} else if (top.isleftPushed == false) {
+				top.isleftPushed = true;
+				if (top.node.left != null) {
+					IPair left = new IPair(top.node.left, false, false, false);
+					stack.addFirst(left);
+				}
+			} else if (top.isrightPushed == false) {
+				top.isrightPushed = true;
+				if (top.node.right != null) {
+					IPair right = new IPair(top.node.right, false, false, false);
+					stack.addFirst(right);
+				}
+			} else {
+				stack.removeFirst();
+			}
+		}
+	}
+
+	public void inOrderItr() {
+		inOrderItr(this.root);
+	}
+
+	private void inOrderItr(Node node) {
+		LinkedList<IPair> stack = new LinkedList<IPair>();
+		IPair i = new IPair(node, false, false, false);
+		stack.addFirst(i);
+		while (stack.size() != 0) {
+			IPair top = stack.peek();
+			if (top.isleftPushed == false) {
+				top.isleftPushed = true;
+				if (top.node.left != null) {
+					IPair left = new IPair(top.node.left, false, false, false);
+					stack.addFirst(left);
+				}
+			} else if (top.isPrinted == false) {
+				top.isPrinted = true;
+				System.out.print(top.node.data + " ");
+			} else if (top.isrightPushed == false) {
+				top.isrightPushed = true;
+				if (top.node.right != null) {
+					IPair right = new IPair(top.node.right, false, false, false);
+					stack.addFirst(right);
+				}
+			} else {
+				stack.removeFirst();
+			}
+		}
+	}
+
+	public void postOrderItr() {
+		postOrderItr(this.root);
+	}
+
+	private void postOrderItr(Node node) {
+		LinkedList<IPair> stack = new LinkedList<IPair>();
+		IPair i = new IPair(node, false, false, false);
+		stack.addFirst(i);
+		while (stack.size() != 0) {
+			IPair top = stack.peek();
+			if (top.isleftPushed == false) {
+				top.isleftPushed = true;
+				if (top.node.left != null) {
+					IPair left = new IPair(top.node.left, false, false, false);
+					stack.addFirst(left);
+				}
+			} else if (top.isrightPushed == false) {
+				top.isrightPushed = true;
+				if (top.node.right != null) {
+					IPair right = new IPair(top.node.right, false, false, false);
+					stack.addFirst(right);
+				}
+			} else if (top.isPrinted == false) {
+				top.isPrinted = true;
+				System.out.print(top.node.data + " ");
+			} else {
+				stack.removeFirst();
 			}
 		}
 	}
