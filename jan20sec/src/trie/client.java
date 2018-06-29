@@ -14,7 +14,12 @@ public class client {
 		t.addWord("tea");
 		t.searchWord("as");
 		t.searchWord("ask");
-		System.out.println();
+		System.out.println("************************");
 		t.displayAllWords();
+		System.out.println("****************************");
+		t.displayTrie();
+		System.out.println("********************");
+		t.removeWord("ask");
+		t.searchWord("as");
 	}
 }

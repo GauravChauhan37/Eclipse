@@ -46,7 +46,9 @@ public class Trie {
 
 	private void addWord(Node node, String s) {
 		if (s.length() == 0) {
-			this.words++;
+			if (node.eow == false) {
+				this.words++;
+			}
 			node.eow = true;
 			return;
 		}
@@ -83,6 +85,36 @@ public class Trie {
 	}
 
 	private void displayTrie(Node node) {
-		
+		System.out.println(node.data + "--> " + node.hp.keySet());
+
+		ArrayList<Character> al = new ArrayList<>(node.hp.keySet());
+		for (int i = 0; i < al.size(); i++) {
+			displayTrie(node.hp.get(al.get(i)));
+		}
+	}
+
+	public void removeWord(String word) {
+		removeWord(this.root, word);
+	}
+
+	private void removeWord(Node node, String word) {
+		if (word.length() == 0) {
+			if (node.eow == true) {
+				this.words--;
+			}
+			node.eow = false;
+			return;
+		}
+		char ch = word.charAt(0);
+		word = word.substring(1);
+		Node child = node.hp.get(ch);
+		if (child == null) { // that word doesnt exists
+			return;
+		}
+		removeWord(child, word);
+		if (child.eow == false && child.hp.size() == 0) {
+			node.hp.remove(ch);
+			this.nodes--;
+		}
 	}
 }
