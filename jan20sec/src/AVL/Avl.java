@@ -1,16 +1,18 @@
-package BinarySearchTrees;
+package AVL;
 
-public class Bst {
+public class Avl {
 	private class Node {
 		int data;
 		Node left;
 		Node right;
+		int ht;
+		int bf;
 	}
 
 	Node root;
 	int size;
 
-	public Bst(int[] sa) {
+	public Avl(int[] sa) {
 		this.root = construct(sa, 0, sa.length - 1);
 	}
 
@@ -23,7 +25,7 @@ public class Bst {
 			return;
 		}
 		String s = node.left == null ? ". " : " " + node.left.data;
-		s += "-->" + node.data + "<--";
+		s += "-->" + "[ " + node.data + " " + node.ht + " " + node.bf + " ]" + "<--";
 		s += node.right == null ? ". " : " " + node.right.data;
 		System.out.println(s);
 		display(node.left);
@@ -40,6 +42,8 @@ public class Bst {
 		this.size++;
 		child.left = construct(sa, lo, mid - 1);
 		child.right = construct(sa, mid + 1, hi);
+		child.ht = height(child);
+		child.bf = getBalancedFactor(child);
 		return child;
 	}
 
@@ -92,46 +96,6 @@ public class Bst {
 		return ans;
 	}
 
-	public void printInRange(int lo, int hi) {
-		printInRange(lo, hi, this.root);
-	}
-
-	private void printInRange(int lo, int hi, Node node) {
-		if (node == null) {
-			return;
-		}
-		if (node.data >= lo && node.data <= hi) {
-			printInRange(lo, hi, node.left);
-			System.out.print(node.data + " ");
-			printInRange(lo, hi, node.right);
-		} else if (node.data < lo) {
-			printInRange(lo, hi, node.right);
-		} else if (node.data > hi) {
-			printInRange(lo, hi, node.left);
-		}
-	}
-
-	static class HeapMover {
-		int sum;
-	}
-
-	public void replaceWithSumOfLargerNodes() {
-		HeapMover mover = new HeapMover();
-		mover.sum = 0;
-		replaceWithSumOfLargerNodes(this.root, mover);
-	}
-
-	private void replaceWithSumOfLargerNodes(Node node, HeapMover mover) {
-		if (node == null) {
-			return;
-		}
-		replaceWithSumOfLargerNodes(node.right, mover);
-		int temp = node.data;
-		node.data = mover.sum;
-		mover.sum += temp;
-		replaceWithSumOfLargerNodes(node.left, mover);
-	}
-
 	public void addNode(int data) {
 		this.root = addNode(this.root, data);
 	}
@@ -147,7 +111,55 @@ public class Bst {
 		} else if (node.data < data) {
 			node.right = addNode(node.right, data);
 		}
+		node.ht = height(node);
+		node.bf = getBalancedFactor(node);
+
+		if (node.bf > 1) {
+			if (node.left.bf > 0) {
+				// ll
+				node = rightRotate(node);
+			} else {
+				// lr
+				node.left = leftRotate(node.left);
+				node = rightRotate(node);
+			}
+		} else if (node.bf < -1) {
+			if (node.right.bf < 0) {
+				// rr
+				node = leftRotate(node);
+			} else {
+				// rl
+				node.right = rightRotate(node.right);
+				node = leftRotate(node);
+			}
+		}
 		return node;
+	}
+
+	private Node leftRotate(Node node) {
+		Node z = node;
+		Node y = node.right;
+		Node child = y.left;
+		y.left = z;
+		z.right = child;
+		z.ht = height(z);
+		z.bf = getBalancedFactor(z);
+		y.ht = height(y);
+		y.bf = getBalancedFactor(y);
+		return y;
+	}
+
+	private Node rightRotate(Node node) {
+		Node z = node;
+		Node y = node.left;
+		Node child = y.right;
+		y.right = z;
+		z.left = child;
+		z.ht = height(z);
+		z.bf = getBalancedFactor(z);
+		y.ht = height(y);
+		y.bf = getBalancedFactor(y);
+		return y;
 	}
 
 	public void removeNode(int data) {
@@ -157,28 +169,67 @@ public class Bst {
 	private Node removeNode(Node node, int data) {
 		if (data < node.data) {
 			node.left = removeNode(node.left, data);
-			return node;
 		} else if (data > node.data) {
 			node.right = removeNode(node.right, data);
-			return node;
 		} else {
 			if (node.left == null && node.right == null) {// zero child
 				return null;
 			} else if (node.left != null && node.right != null) { // two child
-				int min = min(node.right);
-				Node n = new Node();
-				n.data = min;
-				n.left = node.left;
-				n.right = node.right;
-				removeNode(min);
-				return n;
+				int rmin = min(node.right);
+				node.data = rmin;
+				node.right = removeNode(node.right, rmin);
 			} else { // one child
 				if (node.left != null) {
-					return node.left;
+					node = node.left;
 				} else {
-					return node.right;
+					node = node.right;
 				}
 			}
 		}
+		node.ht = height(node);
+		node.bf = getBalancedFactor(node);
+
+		if (node.bf > 1) {
+			if (node.left.bf > 0) {
+				// ll
+				node = rightRotate(node);
+			} else {
+				// lr
+				node.left = leftRotate(node.left);
+				node = rightRotate(node);
+			}
+		} else if (node.bf < -1) {
+			if (node.right.bf < 0) {
+				// rr
+				node = leftRotate(node);
+			} else {
+				// rl
+				node.right = rightRotate(node.right);
+				node = leftRotate(node);
+			}
+		}
+		return node;
+	}
+
+	public int height(Node node) {
+		if (node == null) {
+			return -1;
+		}
+
+		int lh = -1;
+		int rh = -1;
+
+		if (node.left != null) {
+			lh = node.left.ht;
+		}
+
+		if (node.right != null) {
+			rh = node.right.ht;
+		}
+		return Math.max(lh, rh) + 1;
+	}
+
+	public int getBalancedFactor(Node node) {
+		return height(node.left) - height(node.right);
 	}
 }
