@@ -1,6 +1,5 @@
 package linkedlist;
 
-import org.omg.Messaging.SyncScopeHelper;
 
 public class Link2 {
 	public ListNode head;
