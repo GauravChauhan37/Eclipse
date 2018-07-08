@@ -436,7 +436,7 @@ public class Graph {
 		}
 	}
 
-	public boolean isBiPertite(String src, HashMap<String, String> hp) {
+	private boolean isBiPertite(String src, HashMap<String, String> hp) {
 		LinkedList<CPair> queue = new LinkedList<>();
 		queue.addLast(new CPair(src, "red"));
 		hp.put(src, "red");
@@ -458,5 +458,123 @@ public class Graph {
 			}
 		}
 		return true;
+	}
+
+	public boolean isBiPertite(String src) {
+		HashMap<String, String> visited = new HashMap<>();
+
+		boolean ans = false;
+		for (String s : vces.keySet()) {
+			if (visited.containsKey(s) == false)
+				ans = ans || isBiPertite(src, visited);
+		}
+		return ans;
+
+	}
+
+	public class DPair implements Comparable<DPair> {
+		String vname;
+		String psf;
+		int wsf;
+
+		@Override
+		public int compareTo(DPair o) {
+			return this.wsf - o.wsf;
+		}
+
+		DPair(String vname, String psf, int wsf) {
+			this.vname = vname;
+			this.psf = psf;
+			this.wsf = wsf;
+		}
+
+		public String toString() {
+			return this.vname + this.psf + this.wsf;
+		}
+	}
+
+	public void djkstra(String src) {
+		HashMap<String, DPair> result = new HashMap<>();
+		GenericHeap<DPair> queue = new GenericHeap<>();
+		for (String s : vces.keySet()) {
+			DPair n = new DPair(s, null, Integer.MAX_VALUE);
+
+			if (s.equals(src)) {
+				n.psf = src;
+				n.vname = src;
+				n.wsf = 0;
+			}
+			queue.add(n);
+			result.put(s, n);
+		}
+		while (queue.size() != 0) {
+			// remove
+			DPair rp = queue.remove();
+			// traverse neigh
+			for (String nbr : vces.get(rp.vname).keySet()) {
+				DPair np = result.get(nbr);
+				int newWeight = rp.wsf + vces.get(rp.vname).get(nbr);
+				String npsf = rp.psf + nbr;
+				// update neigh
+				if (newWeight < np.wsf) {
+					np.wsf = newWeight;
+					np.psf = npsf;
+					queue.updateHeap(np);
+				}
+			}
+		}
+		System.out.println(result);
+	}
+
+	public class PPair implements Comparable<PPair> {
+		int wsf;
+		String vname;
+		String parent;
+
+		@Override
+		public int compareTo(PPair o) {
+			return this.wsf - o.wsf;
+		}
+
+		public PPair(int wsf, String vname, String parent) {
+			this.wsf = wsf;
+			this.vname = vname;
+			this.parent = parent;
+		}
+	}
+
+	public Graph Prims() {
+		HashMap<String, PPair> result = new HashMap<>();
+		GenericHeap<PPair> queue = new GenericHeap<>();
+		Graph mst = new Graph();
+		for (String s : vces.keySet()) {
+			PPair n = new PPair(Integer.MAX_VALUE, s, null);
+			queue.add(n);
+			result.put(s, n);
+		}
+		while (queue.size() != 0) {
+			// remove
+			PPair rp = queue.remove();
+			// add in mst
+			mst.addVertex(rp.vname);
+			if (rp.parent != null) {
+				mst.addEdge(rp.vname, rp.parent, rp.wsf);
+			}
+
+			for (String nbr : vces.get(rp.vname).keySet()) {
+				if (mst.containsVertex(nbr) == false) {
+					PPair np = result.get(nbr);
+					int newWeight = vces.get(rp.vname).get(nbr);
+					String npsf = nbr;
+					// update neigh
+					if (newWeight < np.wsf) {
+						np.wsf = newWeight;
+						np.parent = rp.vname;
+						queue.updateHeap(np);
+					}
+				}
+			}
+		}
+		return mst;
 	}
 }

@@ -3,7 +3,6 @@ package JUNE15;
 
 public class kReverse extends linkedList {
 	public void kReverse(int k) {
-//		linkedList ll = new linkedList();   //not reqd
 		linkedList prev = new linkedList();
 		linkedList curr = new linkedList();
 		while (this.size != 0) {

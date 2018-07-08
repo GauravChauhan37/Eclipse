@@ -16,12 +16,12 @@ public class client {
 		g.addEdge("A", "B", 10);
 		g.addEdge("A", "C", 50);
 		g.addEdge("B", "D", 20);
-		// g.addEdge("C", "E", 30);
+		g.addEdge("C", "E", 30);
 		g.addEdge("D", "C", 4);
 		g.addEdge("E", "F", 20);
 		g.addEdge("E", "G", 10);
 		g.display();
-		System.out.println("****************");
+		System.out.println("***********7*****");
 		// // System.out.println(g.hasPath("A", "E"));
 		// HashSet<String> visited = new HashSet<>();
 		// // System.out.println("***************");
@@ -38,7 +38,10 @@ public class client {
 		// g.dft();
 		// g.getConnectedComponents();
 		// System.out.println(g.isAcyclic());
-		HashMap<String, String> hp = new HashMap<>();
-		System.out.println(g.isBiPertite("A", hp));
+
+		// System.out.println(g.isBiPertite("A"));
+		// g.djkstra("A");
+		Graph mst = g.Prims();
+		mst.display();
 	}
 }
