@@ -11,7 +11,7 @@ public class GenericHeap<T extends Comparable<T>> { // extends cz to enable
 	// if max is false or not passed --> minheap
 	// if max is true --> maxheap
 
-	GenericHeap() { // default
+	public GenericHeap() { // default
 
 	}
 

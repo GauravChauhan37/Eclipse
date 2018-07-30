@@ -11,7 +11,9 @@ public class client {
 		t.addWord("see");
 		t.addWord("seen");
 		t.addWord("riv");
+		t.addWord("ase");
 		t.addWord("tea");
+		t.addWord("seas");
 		t.searchWord("as");
 		t.searchWord("ask");
 		System.out.println("************************");

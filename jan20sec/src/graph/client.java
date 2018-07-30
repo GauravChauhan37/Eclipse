@@ -20,7 +20,7 @@ public class client {
 		g.addEdge("D", "C", 4);
 		g.addEdge("E", "F", 20);
 		g.addEdge("E", "G", 10);
-		g.display();
+//		g.display();
 		System.out.println("***********7*****");
 		// // System.out.println(g.hasPath("A", "E"));
 		// HashSet<String> visited = new HashSet<>();
