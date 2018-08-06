@@ -2,9 +2,13 @@ package dp;
 
 public class matrixchainmult {
 	public static int countOperations(int[] a, int si, int ei) {
+		if (si > ei) {
+			return 0;
+		}
 		if (si + 1 == ei) {
 			return 0;
 		}
+
 		int ans = Integer.MAX_VALUE;
 		for (int cut = si + 1; cut <= ei; cut++) {
 			int first = countOperations(a, si, cut);

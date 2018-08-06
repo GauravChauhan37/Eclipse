@@ -53,8 +53,8 @@ public class coinchange {
 
 	public static void main(String[] args) {
 		int[] a = { 2, 3, 5, 6 };
-		 coinChange(a, 10);
-//		coinChangeperm(a, 10);
+//		 coinChange(a, 10);
+		coinChangeperm(a, 10);
 	}
 
 }

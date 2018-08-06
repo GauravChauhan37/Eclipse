@@ -4,7 +4,7 @@ public class client {
 
 	public static void main(String[] args) {
 		genericTree g = new genericTree();
-		// g.display();
+		 g.display();
 		// g.size2();
 		// g.max();
 		// g.find(11);
@@ -21,9 +21,9 @@ public class client {
 		// g.postOrder();
 		// g.levelOrder();
 		// g.levelOrderLineWise();
-		// g.zigZag();
-		// g.linearise();
-		// g.display();
+//		 g.zigZag();
+		 g.linearise();
+		 g.display();
 		// g.lineariseEff();
 		// g.display();
 		// g.multiSolver(Integer.MIN_VALUE);
@@ -31,7 +31,7 @@ public class client {
 //		genericTree other = new genericTree();
 //		g.isoMorphic(other);
 //		g.isMirror(other);
-		g.isSymmetric();
+//		g.isSymmetric();
 		
 	}
 

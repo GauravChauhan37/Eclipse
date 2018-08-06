@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class diceroll {
 	public static void rollcombos(int n, String ans) {
-		System.out.println("current vals" + "  " + " -->" + "  " + ans); // jtu
+//		System.out.println("current vals" + "  " + " -->" + "  " + ans); // jtu
 		if (n == 0) {
 			System.out.println(ans);
 			return;

@@ -2,8 +2,8 @@ package dp;
 
 public class knapsack {
 	private static int findMaxProfit(int[] prices, int[] wts, int capacity, int[][] mat) {
-		for (int r = 0; r < mat.length; r++) {         // r reprents index determining weights and prices
-			for (int cap = 0; cap < mat[0].length; cap++) {     // col repesrents capacity
+		for (int r = 0; r < mat.length; r++) {         // r represents index determining weights and prices
+			for (int cap = 0; cap < mat[0].length; cap++) {     // col represents capacity
 				if (cap == 0) {
 					mat[r][cap] = 0;
 				} else if (r == 0) {

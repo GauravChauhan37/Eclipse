@@ -64,9 +64,9 @@ public class countmazepath {
 		// System.out.println(findpath(0, 0, 3, 3, new int[4][4]));
 		// System.out.println(findpathiter(0, 0, 3, 3));
 		System.out.println(findpatheff(0, 0, 3, 3));
-		long end = System.currentTimeMillis();
-		System.out.println("time" + "-->");
-		System.out.println(end - start);
+//		long end = System.currentTimeMillis();
+//		System.out.println("time" + "-->");
+//		System.out.println(end - start);
 	}
 
 }

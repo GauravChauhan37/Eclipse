@@ -46,10 +46,10 @@ public class perm {
 	}
 
 	public static void main(String[] args) {
-		String s = "abc";
-		// per(s, "");
-		// persb(new StringBuilder(s), new StringBuilder());
-		persb2(new StringBuilder(s), new StringBuilder());
+		String s = "abca";
+		 per(s, "");
+//		 persb(new StringBuilder(s), new StringBuilder());
+//		persb2(new StringBuilder(s), new StringBuilder());
 	}
 
 }

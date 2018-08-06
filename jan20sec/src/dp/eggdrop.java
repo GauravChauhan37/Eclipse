@@ -26,7 +26,6 @@ public class eggdrop {
 				min = max;
 			}
 		}
-		System.out.println(++counter);
 		qb[noOfFloors][noOfEggs] = min + 1;
 		return min + 1;
 	}

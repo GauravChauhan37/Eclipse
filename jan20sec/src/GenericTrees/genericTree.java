@@ -218,6 +218,8 @@ public class genericTree {
 		Stack<Node> st2 = new Stack();
 		st1.add(root);
 		boolean flag = false;
+		// flag false means normal order
+		// flag true means reverse order
 		while (st1.size() != 0 || st2.size() != 0) {
 			if (flag == false) {
 				while (st1.size() != 0) {
