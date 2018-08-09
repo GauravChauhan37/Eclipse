@@ -278,20 +278,16 @@ public class genericTree {
 		if (node.children.size() == 0) {
 			return node;
 		}
-
-		Node lastchild = node.children.get(node.children.size() - 1);
-		Node overalltail = linearizeEff(lastchild);
-
+		Node overallTail = node.children.get(node.children.size() - 1);
+		linearizeEff(node.children.get(node.children.size() - 1));
 		for (int i = node.children.size() - 1; i >= 1; i--) {
-			Node inode = node.children.get(i);
-			Node im1node = node.children.get(i - 1);
-
-			Node im1tail = linearizeEff(im1node);
+			Node imTail = node.children.get(i);
+			Node imHead = node.children.get(i - 1);
+			Node imHeadsTail = linearizeEff(imHead);
 			node.children.remove(i);
-			im1tail.children.add(inode);
+			imHeadsTail.children.add(imTail);
 		}
-
-		return overalltail;
+		return overallTail;
 	}
 
 	static class HeapMover {
@@ -403,7 +399,7 @@ public class genericTree {
 		System.out.println(isMirror(this.root, this.root));
 	}
 
-	 class Pair {
+	class Pair {
 		Node node;
 		boolean printed;
 		int noOfChildrenPushed;

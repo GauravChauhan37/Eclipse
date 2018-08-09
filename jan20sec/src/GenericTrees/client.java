@@ -1,5 +1,6 @@
 package GenericTrees;
 
+
 public class client {
 
 	public static void main(String[] args) {
@@ -22,10 +23,10 @@ public class client {
 		// g.levelOrder();
 		// g.levelOrderLineWise();
 //		 g.zigZag();
-		 g.linearise();
+//		 g.linearise();
+//		 g.display();
+		 g.lineariseEff();
 		 g.display();
-		// g.lineariseEff();
-		// g.display();
 		// g.multiSolver(Integer.MIN_VALUE);
 //		System.out.println(g.kthSmallest(3));
 //		genericTree other = new genericTree();
@@ -34,5 +35,5 @@ public class client {
 //		g.isSymmetric();
 		
 	}
-
 }
+
