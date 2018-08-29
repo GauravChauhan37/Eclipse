@@ -11,11 +11,11 @@ public class Graph {
 	HashMap<String, HashMap<String, Integer>> vces = new HashMap<>();
 
 	protected void addEdge(String vname, String v2name, int weight) {
-		if (vces.containsKey(vname) == false || vces.containsKey(v2name) == false) {
+		if (vces.containsKey(vname) == false) {
 			return;
 		}
 		vces.get(vname).put(v2name, weight);
-		vces.get(v2name).put(vname, weight);
+//		vces.get(v2name).put(vname, weight);
 
 	}
 
@@ -37,145 +37,70 @@ public class Graph {
 
 	}
 
-	private class TPair {
-		String s;
-		String psf;
-
-		public TPair(String s, String psf) {
-			this.s = s;
-			this.psf = psf;
-		}
-	}
-
-	void bfs(String src, String dest) {
-		LinkedList<TPair> queue = new LinkedList<>();
-		queue.add(new TPair(src, src + " "));
+	public void dfs(String src) {
 		HashSet<String> visited = new HashSet<>();
+		dfs(src, visited);
+	}
+
+	private void dfs(String src, HashSet<String> visited) {
 		visited.add(src);
-		while (queue.size() != 0) {
-			// remove
-			TPair rem = queue.removeFirst();
-			// check
-			if (rem.s.equals(dest)) {
-				System.out.println(rem.psf);
-				return;
+		LinkedList<String> stack = new LinkedList<>();
+		stack.add(src);
+		while (stack.size() != 0) {
+			String rm = stack.removeFirst();
+			visited.add(rm);
+			for (String neigh : vces.get(rm).keySet()) {
+				if (visited.contains(neigh) == false)
+					stack.addFirst(neigh);
 			}
-			visited.add(rem.s);
-			// add neighbours
-			for (String s : vces.get(rem.s).keySet()) {
-				if (visited.contains(s) == false) {
-					queue.addLast(new TPair(s, rem.psf + s + " "));
-				}
-			}
+		}
+		// i am printing visited to check if it contains all the edges
+		for (String edge : visited) {
+			System.out.print(edge + " ");
 		}
 	}
 
-	public class DPair implements Comparable<DPair> {
-		String vname;
-		String psf;
-		int wsf;
-
-		@Override
-		public int compareTo(DPair o) {
-			return this.wsf - o.wsf;
-		}
-
-		DPair(String vname, String psf, int wsf) {
-			this.vname = vname;
-			this.psf = psf;
-			this.wsf = wsf;
-		}
-
-		public String toString() {
-			return this.vname + " " + this.psf + " " + " " + this.wsf;
-		}
-	}
-
-	protected void Djkstra(String src, String dest) {
-		GenericHeap<DPair> pq = new GenericHeap();
-		HashMap<String, DPair> hp = new HashMap<>();
+	public void topologicalSort() {
+		HashSet<String> visited = new HashSet<>();
+		LinkedList<String> stack = new LinkedList<>();
 		for (String s : vces.keySet()) {
-			DPair d = new DPair(s, null, Integer.MAX_VALUE);
-			if (s == src) {
-				d.wsf = 0;
-				d.psf = src;
-				d.vname = src;
-			}
-			pq.add(d);
-			hp.put(s, d);
-		}
-		while (pq.size() != 0) {
-			DPair rp = pq.remove();
-			for (String s : vces.get(rp.vname).keySet()) {
-				DPair np = hp.get(s);
-				int newWeight = rp.wsf + vces.get(rp.vname).get(s);
-				String psf = rp.psf + s;
-				if (newWeight < np.wsf) {
-					np.psf = psf;
-					np.wsf = newWeight;
-					pq.updateHeap(np);
-				}
+			if (visited.contains(s) == false) {
+				stack.addFirst(s);
+				topologicalSort(s, stack, visited);
 			}
 		}
-		System.out.println(hp);
-	}
-
-	public class PPair implements Comparable<PPair> {
-		int wsf;
-		String vname;
-		String parent;
-
-		@Override
-		public int compareTo(PPair o) {
-			return this.wsf - o.wsf;
-		}
-
-		public PPair(int wsf, String vname, String parent) {
-			this.wsf = wsf;
-			this.vname = vname;
-			this.parent = parent;
+		while (stack.size() != 0) {
+			System.out.print(stack.removeFirst()+" ");
 		}
 	}
 
-	protected Graph Prims() {
-		HashMap<String, PPair> result = new HashMap<>();
-		GenericHeap<PPair> queue = new GenericHeap<>();
-		Graph mst = new Graph();
-		for (String s : vces.keySet()) {
-			PPair n = new PPair(Integer.MAX_VALUE, s, null);
-			queue.add(n);
-			result.put(s, n);
-		}
-		while (queue.size() != 0) {
-			// remove
-			PPair rp = queue.remove();
-			mst.addVertex(rp.vname);
-			if (rp.parent != null) {
-				mst.addEdge(rp.vname, rp.parent, rp.wsf);
-			}
-
-			for (String nbr : vces.get(rp.vname).keySet()) {
-				if (mst.containsVertex(nbr) == false) {
-					PPair np = result.get(nbr);
-					int newWeight = vces.get(rp.vname).get(nbr);
-					String npsf = nbr;
-					// update neigh
-					if (newWeight < np.wsf) {
-						np.wsf = newWeight;
-						np.parent = rp.vname;
-						queue.updateHeap(np);
-					}
-				}
+	private void topologicalSort(String s, LinkedList<String> stack, HashSet<String> visited) {
+		for (String neigh : vces.get(s).keySet()) {
+			if (visited.contains(neigh) == false) {
+				visited.add(neigh);
+				stack.addFirst(neigh);
 			}
 		}
-		return mst;
 	}
 
-	private boolean containsVertex(String vname) {
-		if (vces.get(vname) != null) {
-			return true;
-		} else {
-			return false;
-		}
+	public static void main(String[] args) {
+		Graph g = new Graph();
+		g.addVertex("A");
+		g.addVertex("B");
+		g.addVertex("C");
+		g.addVertex("D");
+		g.addVertex("E");
+		g.addVertex("F");
+		g.addVertex("G");
+		g.addEdge("A", "B", 10);
+		g.addEdge("A", "C", 2);
+		g.addEdge("C", "D", 1);
+		g.addEdge("B", "D", 11);
+		g.addEdge("B", "E", 3);
+		g.addEdge("E", "F", 66);
+		g.addEdge("E", "G", 7);
+		g.addEdge("F", "G", 8);
+//		g.dfs("A");
+		g.topologicalSort();
 	}
 }
