@@ -11,11 +11,10 @@ public class Graph {
 	HashMap<String, HashMap<String, Integer>> vces = new HashMap<>();
 
 	protected void addEdge(String vname, String v2name, int weight) {
-		if (vces.containsKey(vname) == false) {
+		if (vces.containsKey(vname) == false ) {
 			return;
 		}
 		vces.get(vname).put(v2name, weight);
-//		vces.get(v2name).put(vname, weight);
 
 	}
 
@@ -65,21 +64,31 @@ public class Graph {
 		LinkedList<String> stack = new LinkedList<>();
 		for (String s : vces.keySet()) {
 			if (visited.contains(s) == false) {
-				stack.addFirst(s);
 				topologicalSort(s, stack, visited);
 			}
 		}
 		while (stack.size() != 0) {
-			System.out.print(stack.removeFirst()+" ");
+			System.out.print(stack.removeFirst() + " ");
 		}
 	}
 
 	private void topologicalSort(String s, LinkedList<String> stack, HashSet<String> visited) {
+		visited.add(s);
 		for (String neigh : vces.get(s).keySet()) {
 			if (visited.contains(neigh) == false) {
 				visited.add(neigh);
-				stack.addFirst(neigh);
 			}
+		}
+		stack.addFirst(s);
+	}
+
+	static class Pair {
+		String v;
+		String color;
+
+		public Pair(String v, String color) {
+			this.v = v;
+			this.color = color;
 		}
 	}
 
